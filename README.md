@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 知命 · 八字命理排盘
 
-## Getting Started
+一款基于**中国传统命理学（子平八字）**的排盘与分析工具，PC / 手机端自适应。
 
-First, run the development server:
+强调**可解释、有理论依据**：每一步推演都展示计算过程与规则出处，是一套逻辑模型，而非占卜或迷信。
+
+## 功能
+
+- **精确排盘**：基于天文算法（`lunar-typescript`），以二十四节气定月、干支历定日时，精确到分。支持公历 / 农历（含闰月）输入。
+- **两种时间录入**：①「精确时刻」——现代出生证明的时:分；②「仅时辰」——族谱常见的只知地支时辰（如"戊辰年五月初三寅时"），按时辰区间取代表时刻排盘（子时取子正），时柱地支准确无误。
+- **真太阳时校正**：按出生地经度校正（内置常用城市经度），避免时辰交界处排错时柱。
+- **四柱八字**：年、月、日、时四柱的天干地支、藏干、十神、星运（十二长生）、纳音、空亡；并给出胎元、命宫、身宫、生肖、星座。
+- **五行力量**：天干 + 地支藏干（本气/中气/余气）加权统计，可视化展示各五行强弱。
+- **日主旺衰与用神**：依据月令得令、同类（印+比劫）与异类（食伤+财+官杀）力量对比判断身强身弱，采用传统**扶抑法**取喜用神与忌神，并完整列出推演步骤。
+- **神煞**：天乙/文昌/太极/国印贵人、禄神、羊刃、金舆、红艳、桃花、驿马、华盖、将星、劫煞、亡神、灾煞、天德/月德贵人、天医、孤辰寡宿、魁罡、三奇贵人、阴阳差错、十恶大败、天罗地网等，每项附查法（理论依据）、命中柱位与吉凶含义，并**结合日主旺衰与喜用神给出联动吉凶判语**（如羊刃身弱为助、身强为忌；吉神临喜用则吉力倍增等）。
+- **合婚（双盘合参）**：输入男女双方生辰，从生肖年支、夫妻宫日支、日主天干（五合/生克）、年命纳音、五行互补、用神互补六个维度评分，给出综合契合度、评级与逐项解读；并附**生肖配对民间口诀**（上/中/下婚）与**结婚择吉**（依通书宜忌、黄道吉神、建除值星，避开冲犯新人生肖，推荐近一年黄道吉日）。
+- **命理解读**：日主性格（按十天干）、命局十神含义/六亲、基于喜用神的调候建议（适宜行业 / 方位 / 色彩 / 生活建议）。
+- **大运流年流月**：按「阳男阴女顺行、阴男阳女逆行」排大运，逐运查看流年干支与十神，点击流年再展开十二流月。
+- **命盘导出与分享**：一键导出命盘 PNG 图片、复制命盘文本摘要、复制可还原命盘的分享链接（URL 带参，打开即排盘）。
+- **术语释义**：内置完整的命理术语解释与理论说明，知其然亦知其所以然。
+
+## 技术栈
+
+- [Next.js 16](https://nextjs.org/)（App Router）+ React 19 + TypeScript
+- Tailwind CSS v4
+- [lunar-typescript](https://github.com/6tail/lunar-typescript)（农历 / 干支 / 八字 天文算法）
+
+## 本地运行
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+打开 [http://localhost:3000](http://localhost:3000)（端口被占用时会自动顺延）。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 目录结构
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+lib/bazi/
+  types.ts      # 类型定义
+  theory.ts     # 干支五行常量、术语释义等理论数据
+  engine.ts     # 排盘核心引擎（封装 lunar-typescript）
+  analysis.ts   # 命理分析层（旺衰、用神喜忌、十神归类）
+  shensha.ts    # 神煞计算（传统查法表）
+  interpret.ts  # 命理解读文案（日主性格、十神、调候建议）
+  hehun.ts      # 合婚双盘合参引擎（生肖/夫妻宫/日主/纳音/五行/用神/生肖口诀）
+  zeri.ts       # 结婚择吉（通书宜忌 + 黄道吉神 + 建除 + 避冲生肖）
+components/      # UI 组件（输入、四柱盘、五行、用神、神煞、解读、大运、合婚、导出、理论）
+app/            # Next.js 页面与布局
+```
 
-## Learn More
+## 说明
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+本工具仅供传统文化研究与自我认知参考。命运受多种因素共同影响，排盘结论不构成任何决策依据。
